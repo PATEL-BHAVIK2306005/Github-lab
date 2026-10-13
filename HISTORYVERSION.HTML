@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Version 01 - Initial Build Release for Git & GitHub Laboratory. B.Tech CSE Project Version History.">
+    <title>Version 01 | Git & Version History Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #0a0e17;
+            --bg-secondary: #111827;
+            --bg-card: rgba(17, 24, 39, 0.75);
+            --bg-card-hover: rgba(30, 41, 59, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(99, 102, 241, 0.35);
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --accent-primary: #6366f1;
+            --accent-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+            --accent-glow: rgba(99, 102, 241, 0.25);
+            --success: #10b981;
+            --success-glow: rgba(16, 185, 129, 0.2);
+            --warning: #f59e0b;
+            --code-bg: #030712;
+            --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(217, 70, 239, 0.08) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        /* Ambient Glow & Grid lines */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                        linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Top Navigation Header */
+        header.app-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            background: rgba(10, 14, 23, 0.8);
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .brand-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            font-weight: 800;
+            font-size: 1.1rem;
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        .brand-title {
+            font-weight: 700;
+            font-size: 1.15rem;
+            letter-spacing: -0.02em;
+        }
+
+        .brand-title span {
+            color: var(--accent-primary);
+        }
+
+        .version-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.85rem;
+            background: rgba(16, 185, 129, 0.12);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: #34d399;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border-radius: 9999px;
+            box-shadow: 0 0 12px var(--success-glow);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--success);
+            border-radius: 50%;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.4); opacity: 0.6; }
+        }
+
+        /* Main Content Layout */
+        main.content-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        /* Hero Showcase */
+        .hero-banner {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 2.5rem;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            transition: border-color 0.3s ease;
+        }
+
+        .hero-banner:hover {
+            border-color: var(--border-glow);
+        }
+
+        .hero-banner::after {
+            content: 'V01';
+            position: absolute;
+            right: -20px;
+            bottom: -35px;
+            font-size: 10rem;
+            font-weight: 900;
+            font-family: var(--font-mono);
+            color: rgba(255, 255, 255, 0.02);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        .hero-pill {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #818cf8;
+            background: rgba(99, 102, 241, 0.12);
+            padding: 0.3rem 0.8rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .hero-title {
+            font-size: 2.75rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.75rem;
+            background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero-desc {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            max-width: 680px;
+            margin-bottom: 1.75rem;
+        }
+
+        .meta-badges-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+        }
+
+        .meta-tag {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            padding: 0.45rem 0.85rem;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-tag strong {
+            color: var(--text-primary);
+        }
+
+        /* Grid Section */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .glass-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 1.75rem;
+            backdrop-filter: blur(10px);
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(99, 102, 241, 0.4);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: var(--radius-sm);
+            background: rgba(99, 102, 241, 0.15);
+            color: #818cf8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .feature-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .check-icon {
+            color: var(--success);
+            font-weight: 700;
+            margin-top: 2px;
+        }
+
+        /* Interactive Terminal / Git Log Section */
+        .terminal-box {
+            background: var(--code-bg);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+        }
+
+        .terminal-header {
+            background: rgba(15, 23, 42, 0.95);
+            padding: 0.75rem 1.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .terminal-controls {
+            display: flex;
+            gap: 6px;
+        }
+
+        .control-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        .terminal-title {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .terminal-body {
+            padding: 1.25rem;
+            font-family: var(--font-mono);
+            font-size: 0.88rem;
+            color: #e2e8f0;
+            line-height: 1.7;
+            overflow-x: auto;
+        }
+
+        .cmd-line {
+            color: #38bdf8;
+            margin-bottom: 0.35rem;
+        }
+
+        .cmd-line::before {
+            content: '$ ';
+            color: #818cf8;
+            font-weight: 700;
+        }
+
+        .cmd-output {
+            color: #94a3b8;
+            margin-bottom: 0.75rem;
+            padding-left: 1rem;
+        }
+
+        .git-hash {
+            color: #fbbf24;
+            font-weight: 600;
+        }
+
+        .git-tag {
+            color: #34d399;
+            font-weight: 600;
+        }
+
+        /* Action Buttons */
+        .actions-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+        }
+
+        .btn {
+            font-family: var(--font-sans);
+            font-size: 0.95rem;
+            font-weight: 600;
+            padding: 0.65rem 1.4rem;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: #ffffff;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
+
+        .btn-primary:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Footer */
+        footer.app-footer {
+            margin-top: auto;
+            border-top: 1px solid var(--border-color);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            backdrop-filter: blur(8px);
+            background: rgba(10, 14, 23, 0.7);
+        }
+
+        footer strong {
+            color: var(--text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.1rem;
+            }
+            .hero-banner {
+                padding: 1.75rem;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Navigation -->
+    <header class="app-header" id="mainHeader">
+        <div class="brand-container">
+            <div class="brand-icon">V1</div>
+            <div class="brand-title">Git & Lab Repository <span>• History</span></div>
+        </div>
+        <div class="version-indicator" id="versionBadge">
+            <span class="pulse-dot"></span>
+            <span>Version 01 (Initial Release)</span>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container -->
+    <main class="content-container">
+
+        <!-- Hero Card -->
+        <section class="hero-banner" id="heroSection">
+            <span class="hero-pill">Milestone 01 • Git Lab</span>
+            <h1 class="hero-title" id="pageTitle">Version 01: Initial Setup & Baseline</h1>
+            <p class="hero-desc">
+                Welcome to <strong>Version 01</strong>. This file marks the foundational commit and initial milestone 
+                for the Git & GitHub version control laboratory experiments. All core structures and baseline 
+                configurations are initialized here.
+            </p>
+            <div class="meta-badges-row">
+                <div class="meta-tag">
+                    <span>Tag:</span>
+                    <strong class="git-tag">v1.0.0</strong>
+                </div>
+                <div class="meta-tag">
+                    <span>Commit:</span>
+                    <strong class="git-hash" id="commitHash">#7fa89b1</strong>
+                </div>
+                <div class="meta-tag">
+                    <span>Branch:</span>
+                    <strong>main</strong>
+                </div>
+                <div class="meta-tag">
+                    <span>Status:</span>
+                    <strong style="color: #34d399;">Clean Working Tree</strong>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Overview & Changelog -->
+        <div class="cards-grid">
+            <!-- Changelog Card -->
+            <article class="glass-card" id="changelogCard">
+                <div class="card-header">
+                    <div class="card-icon">🚀</div>
+                    <h2 class="card-title">Version 01 Changelog</h2>
+                </div>
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <span class="check-icon">✓</span>
+                        <span><strong>Initial Repository Creation:</strong> Initialized local Git tracking and working tree.</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="check-icon">✓</span>
+                        <span><strong>Baseline HTML5 Architecture:</strong> Established semantic HTML tags and responsive meta layout.</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="check-icon">✓</span>
+                        <span><strong>Modern UI Design System:</strong> Configured dark-mode glassmorphic theme and CSS custom variables.</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="check-icon">✓</span>
+                        <span><strong>History Tracking Ready:</strong> Prepared for successive commits (Version 02, Version 03 diff comparisons).</span>
+                    </li>
+                </ul>
+            </article>
+
+            <!-- Metadata & Laboratory Details -->
+            <article class="glass-card" id="detailsCard">
+                <div class="card-header">
+                    <div class="card-icon">🔬</div>
+                    <h2 class="card-title">Lab Details & Objectives</h2>
+                </div>
+                <ul class="feature-list">
+                    <li class="feature-item">
+                        <span class="check-icon">✓</span>
+                        <span><strong>Course:</strong> B.Tech Computer Science & Engineering</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="check-icon">✓</span>
+                        <span><strong>Practical Focus:</strong> Version Control, Commit Graphs & Historical Rollbacks</span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="check-icon">✓</span>
+                        <span><strong>File Tracked:</strong> <code>HISTORYVERSION.HTML</code></span>
+                    </li>
+                    <li class="feature-item">
+                        <span class="check-icon">✓</span>
+                        <span><strong>Next Expected Step:</strong> Stage changes, commit, and create branch for Version 02.</span>
+                    </li>
+                </ul>
+            </article>
+        </div>
+
+        <!-- Simulated Git Terminal for Version 01 -->
+        <section class="terminal-box" id="gitTerminal">
+            <div class="terminal-header">
+                <div class="terminal-controls">
+                    <span class="control-dot dot-red"></span>
+                    <span class="control-dot dot-yellow"></span>
+                    <span class="control-dot dot-green"></span>
+                </div>
+                <span class="terminal-title">bash — git-bash / terminal — 80x24</span>
+                <span style="font-size: 0.75rem; color: #64748b; font-family: var(--font-mono);">UTF-8</span>
+            </div>
+            <div class="terminal-body">
+                <div class="cmd-line">git init</div>
+                <div class="cmd-output">Initialized empty Git repository in D:/Github lab/.git/</div>
+
+                <div class="cmd-line">git add HISTORYVERSION.HTML</div>
+                <div class="cmd-output">Added 'HISTORYVERSION.HTML' to staging area</div>
+
+                <div class="cmd-line">git commit -m "feat: Version 01 initial release"</div>
+                <div class="cmd-output">
+                    [main (root-commit) <span class="git-hash">7fa89b1</span>] feat: Version 01 initial release<br>
+                    1 file changed, 1 insertion(+)<br>
+                    create mode 100644 HISTORYVERSION.HTML
+                </div>
+
+                <div class="cmd-line">git tag -a v1.0.0 -m "Release Version 01"</div>
+                <div class="cmd-output">Tagged commit <span class="git-hash">7fa89b1</span> as <span class="git-tag">v1.0.0</span></div>
+
+                <div class="cmd-line">git log --oneline --graph --decorate</div>
+                <div class="cmd-output">
+                    * <span class="git-hash">7fa89b1</span> (<span class="git-tag">HEAD -> main</span>, <span class="git-tag">tag: v1.0.0</span>) feat: Version 01 initial release
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Actions Bar -->
+        <div class="actions-bar" id="actionBar">
+            <div>
+                <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.2rem;">Quick Git Actions</h3>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Interact with Version 01 controls</p>
+            </div>
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                <button class="btn btn-secondary" id="copyHashBtn" onclick="copyCommitHash()">
+                    <span>📋</span>
+                    <span>Copy Commit ID</span>
+                </button>
+                <button class="btn btn-primary" id="confirmVersionBtn" onclick="celebrateVersion()">
+                    <span>✨</span>
+                    <span>Confirm Version 01</span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer">
+        <p><strong>GitHub Lab Experiment</strong> • Version Control System Baseline (Version 01) • Ready for Version Tracking</p>
+    </footer>
+
+    <!-- Interactive Logic -->
+    <script>
+        function copyCommitHash() {
+            const hash = document.getElementById('commitHash').innerText;
+            navigator.clipboard.writeText(hash).then(() => {
+                const btn = document.getElementById('copyHashBtn');
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = '<span>✅</span><span>Copied: ' + hash + '</span>';
+                btn.style.borderColor = '#10b981';
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.style.borderColor = '';
+                }, 2000);
+            }).catch(() => {
+                alert('Commit Hash: ' + hash);
+            });
+        }
+
+        function celebrateVersion() {
+            const btn = document.getElementById('confirmVersionBtn');
+            btn.innerHTML = '<span>🎉</span><span>Version 01 Active!</span>';
+            btn.style.transform = 'scale(1.05)';
+            setTimeout(() => {
+                btn.innerHTML = '<span>✨</span><span>Confirm Version 01</span>';
+                btn.style.transform = 'scale(1)';
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
